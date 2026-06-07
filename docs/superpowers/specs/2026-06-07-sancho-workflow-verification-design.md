@@ -38,7 +38,7 @@ NewAskCmd.Execute() → ResolveSettings() → NewProvider() → ChatCompletion()
 1. **Input validation** (`cmd/ask.go:26-28`): `-q/--question` required, returns error if missing
 2. **File reading** (`internal/files/read.go:16-60`): `filepath.Glob` for patterns, `**` triggers walk
 3. **Prompt formatting** (`internal/files/read.go:62-71`): Files wrapped in `<file path="...">` tags
-4. **TOON prompt** (`cmd/ask.go:12-15`): System message enforces MinLang format
+4. **TOON prompt** (`cmd/ask.go:12-15`): System message enforces TOON format (@path:line for locations, - for bullets, under 120 tokens)
 5. **Output flow** (`cmd/ask.go:62-65`): stdout = content, stderr = tokens unless `--json`
 
 ## Workflow 2: sancho write

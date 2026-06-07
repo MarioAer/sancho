@@ -13,16 +13,14 @@ builds:
     goarch:
       - amd64
       - arm64
-binary: sancho
+    binary: sancho
 
 archives:
   - format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
-  extra_files:
-    - glob: "homebrew-tap/**/*"
-      name_template: "sancho.rb"
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
 
 changelog:
   use: github-native
@@ -32,6 +30,6 @@ homebrews:
     tap:
       owner: marioaer
       name: homebrew-tap
-    folder: ./homebrew-tap
+    folder: Formula
     homepage: "https://github.com/marioaer/sancho"
     description: "CLI for delegating coding tasks to LLMs"
