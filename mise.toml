@@ -1,23 +1,35 @@
 [tools]
 go = "1.26"
-golangci-lint = "latest"
+golangci-lint = "2.12.2"
+staticcheck = "latest"
 
 [tasks.check]
-description = "Run fmt, vet, and lint checks"
-run = "gofmt -l . && go vet ./... && golangci-lint run"
+description = "Run all verification checks (fmt, vet, lint, staticcheck)"
+depends = ["check:fmt", "check:vet", "check:lint", "check:static"]
 
 [tasks."check:fmt"]
+description = "Check code formatting"
 run = "gofmt -l ."
 
 [tasks."check:fmt:fix"]
+description = "Fix code formatting"
 run = "gofmt -w ."
 
 [tasks."check:vet"]
+description = "Run go vet"
 run = "go vet ./..."
 
-[tasks.lint]
+[tasks."check:lint"]
+description = "Run linter"
+run = "golangci-lint run"
+
+[tasks."check:lint:fix"]
 description = "Run linter with auto-fix"
 run = "golangci-lint run --fix"
+
+[tasks."check:static"]
+description = "Run staticcheck"
+run = "staticcheck ./..."
 
 [tasks.test]
 description = "Run Go tests"
@@ -25,6 +37,8 @@ run = "go test ./..."
 
 [tasks.build]
 description = "Build the project binary"
+sources = ["**/*.go", "go.mod", "go.sum"]
+outputs = ["sancho"]
 run = "go build -o sancho ."
 
 [tasks.run]
@@ -32,5 +46,9 @@ description = "Build and run the CLI (pass args after --)"
 depends = ["build"]
 run = "./sancho ${@}"
 
-[tasks."dev:setup"]
-run = "go install honnef.co/go/tools/cmd/staticcheck@latest && go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"
+[tasks.clean]
+description = "Remove build artifacts"
+run = "rm -f sancho"
+
+[tasks.default]
+alias = "check"
