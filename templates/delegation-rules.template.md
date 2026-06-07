@@ -39,4 +39,4 @@ sancho write -s "Unit tests for UserService covering CRUD" -c internal/service/u
 1. Always pass `--json` when piping output to another tool.
 2. Use `-c / --context` with `sancho write` to match project style.
 3. Use glob patterns with `-p` (supports `**` for recursive).
-4. Model overrides: `-m` or `--model`. Provider overrides: `--provider`.
+4. Model overrides: `--model`. Provider overrides: `--provider`.
