@@ -1,0 +1,16 @@
+name: Feature Request
+description: Suggest an idea for sancho
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes:
+      label: Problem description
+      description: What problem would this feature solve?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed solution
+      description: How would you like it to work?
+    validations:
+      required: true

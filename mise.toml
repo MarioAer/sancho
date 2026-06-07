@@ -1,0 +1,37 @@
+[tools]
+go = "1.26"
+
+[tasks.check]
+description = "Run fmt, vet, staticcheck, and lint"
+run = "gofmt -l . && go vet ./... && staticcheck ./... && golangci-lint run"
+
+[tasks."check:fmt"]
+run = "gofmt -l ."
+
+[tasks."check:fmt:fix"]
+run = "gofmt -w ."
+
+[tasks."check:vet"]
+run = "go vet ./..."
+
+[tasks."check:staticcheck"]
+run = "staticcheck ./..."
+
+[tasks."check:lint"]
+run = "golangci-lint run"
+
+[tasks.test]
+description = "Run Go tests"
+run = "go test ./..."
+
+[tasks.build]
+description = "Build the project binary"
+run = "	go build -o sancho ."
+
+[tasks.run]
+description = "Build and run the CLI (pass args after --)"
+depends = ["build"]
+	run = "./sancho ${@}"
+
+[tasks."dev:setup"]
+run = "go install honnef.co/go/tools/cmd/staticcheck@latest && go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"

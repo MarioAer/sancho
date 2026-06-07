@@ -1,0 +1,48 @@
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - freebsd
+      - windows
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    binaries:
+      - sancho
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  extra_files:
+    - glob: "**/Formula/**"
+      name_template: "Formula/{{ .ProjectName }}.rb"
+
+signs:
+  - artifacts: checksum
+    args:
+      - "--batch"
+      - "--local-user"
+      - "{{ .Env.GPG_FINGERPRINT }}"
+    cmd: gpg
+    env:
+      - GPG_FINGERPRINT={{ .Env.GPG_FINGERPRINT }}
+
+changelog:
+  use: github-native
+  sort: empty
+
+homebrews:
+  - name: sancho
+    tap:
+      owner: marioaer
+      name: homebrew-tap
+    folder: ./homebrew-tap
