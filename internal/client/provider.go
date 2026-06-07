@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"time"
 
 	"github.com/marioaer/sancho/internal/config"
 )
@@ -59,5 +60,8 @@ var newProviderFunc = func(s config.Settings) Provider {
 }
 
 func NewProvider(s config.Settings) Provider {
-	return newProviderFunc(s)
+	p := newProviderFunc(s)
+	p = WithRetry(p, config.RetryConfig(s.Retry))
+	p = WithTimeout(p, time.Duration(s.TimeoutSeconds)*time.Second)
+	return p
 }

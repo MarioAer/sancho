@@ -11,6 +11,12 @@ CLI for delegating coding tasks to LLMs via OpenRouter, AWS Bedrock, OpenAI, or 
 go install github.com/marioaer/sancho@latest
 ```
 
+Or via Homebrew:
+
+```text
+brew install marioaer/tap/sancho
+```
+
 ## Config
 
 Search order: ./.sancho.json -> HOME/.config/sancho/config.json -> env vars -> defaults.

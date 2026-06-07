@@ -7,38 +7,25 @@ builds:
   - env:
       - CGO_ENABLED=0
     goos:
-      - freebsd
-      - windows
       - linux
+      - windows
       - darwin
     goarch:
       - amd64
       - arm64
-    binaries:
-      - sancho
+binary: sancho
 
 archives:
   - format: tar.gz
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
   extra_files:
-    - glob: "**/Formula/**"
-      name_template: "Formula/{{ .ProjectName }}.rb"
-
-signs:
-  - artifacts: checksum
-    args:
-      - "--batch"
-      - "--local-user"
-      - "{{ .Env.GPG_FINGERPRINT }}"
-    cmd: gpg
-    env:
-      - GPG_FINGERPRINT={{ .Env.GPG_FINGERPRINT }}
+    - glob: "homebrew-tap/**/*"
+      name_template: "sancho.rb"
 
 changelog:
   use: github-native
-  sort: empty
 
 homebrews:
   - name: sancho
@@ -46,3 +33,5 @@ homebrews:
       owner: marioaer
       name: homebrew-tap
     folder: ./homebrew-tap
+    homepage: "https://github.com/marioaer/sancho"
+    description: "CLI for delegating coding tasks to LLMs"

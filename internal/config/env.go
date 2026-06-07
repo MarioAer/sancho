@@ -10,7 +10,7 @@ type Config struct {
 	OpenRouter     OpenRouterConfig `json:"openrouter"`
 	Bedrock        BedrockConfig    `json:"bedrock"`
 	OpenAI         OpenAIConfig     `json:"openai"`
-	Anthropic      AnthropicConfig  `json:"anthropicus"`
+	Anthropic      AnthropicConfig  `json:"anthropic"`
 	Ask            AskConfig        `json:"ask"`
 	Write          WriteConfig      `json:"write"`
 	Retry          RetryConfig      `json:"retry"`
