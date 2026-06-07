@@ -1,5 +1,8 @@
 # sancho
 
+[![CI](https://github.com/marioaer/sancho/actions/workflows/ci.yml/badge.svg)](https://github.com/marioaer/sancho/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/marioaer/sancho)](https://goreportcard.com/report/github.com/marioaer/sancho)
+
 CLI for delegating coding tasks to LLMs via OpenRouter, AWS Bedrock, OpenAI, or Anthropic.
 
 ## Install
