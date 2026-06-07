@@ -52,15 +52,15 @@ func NewAskCmd(stdout, stderr *os.File) *cobra.Command {
 			}
 			resp, err := p.ChatCompletion(cmd.Context(), req)
 			if err != nil {
-				fmt.Fprintln(stderr, "Error:", err)
+				fmt.Fprintln(stderr, "Error:", err) //nolint:errcheck
 				return err
 			}
 
 			if jsonOutput {
-				fmt.Fprintln(stdout, resp.Content)
+				fmt.Fprintln(stdout, resp.Content) //nolint:errcheck
 			} else {
-				fmt.Fprintln(stdout, resp.Content)
-				fmt.Fprintf(stderr, "Tokens: %d prompt + %d completion = %d total\n",
+				fmt.Fprintln(stdout, resp.Content)                                    //nolint:errcheck
+				fmt.Fprintf(stderr, "Tokens: %d prompt + %d completion = %d total\n", //nolint:errcheck
 					resp.Usage.PromptTokens, resp.Usage.CompletionTokens, resp.Usage.TotalTokens)
 			}
 			return nil

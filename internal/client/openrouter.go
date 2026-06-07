@@ -43,7 +43,7 @@ func (o *OpenRouter) ChatCompletion(ctx context.Context, req ChatRequest) (*Chat
 	if err != nil {
 		return nil, fmt.Errorf("openrouter request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == http.StatusTooManyRequests {
 		retryAfter := parseRetryAfter(resp.Header.Get("Retry-After"))

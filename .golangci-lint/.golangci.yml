@@ -12,3 +12,6 @@ linters:
 
 issues:
   exclude-use-default: false
+  exclude:
+    - fmt\.F(print|println|fprint).*is not checked
+    - os\.(Setenv|Unsetenv).*is not checked

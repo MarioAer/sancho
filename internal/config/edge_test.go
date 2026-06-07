@@ -18,15 +18,15 @@ func TestFilePrecedence(t *testing.T) {
 	_ = os.WriteFile(homeDir+"/config.json", []byte(`{"provider":"anthropic"}`), 0644)
 
 	origHome := os.Getenv("HOME")
-	os.Setenv("HOME", filepath.Join(dir, "home"))
-	defer os.Unsetenv("HOME")
+	os.Setenv("HOME", filepath.Join(dir, "home")) //nolint:errcheck
+	defer os.Unsetenv("HOME")                     //nolint:errcheck
 
 	cfg1, _ := LoadFile(project)
 	if cfg1.Provider != "openrouter" {
 		t.Fatalf("expected project config first, got %s", cfg1.Provider)
 	}
 
-	os.Remove(project + "/.sancho.json")
+	_ = os.Remove(project + "/.sancho.json")
 	cfg2, _ := LoadFile(project)
 	if cfg2.Provider != "anthropic" {
 		t.Fatalf("expected home config fallback, got %s", cfg2.Provider)
@@ -70,9 +70,9 @@ func TestResolveCLIOverridesFile(t *testing.T) {
 }
 
 func TestResolveBackwardsCompat(t *testing.T) {
-	os.Setenv("WORKER_API_KEY", "legacy-key")
-	os.Unsetenv("SANCHO_API_KEY")
-	defer os.Unsetenv("WORKER_API_KEY")
+	os.Setenv("WORKER_API_KEY", "legacy-key") //nolint:errcheck
+	os.Unsetenv("SANCHO_API_KEY")             //nolint:errcheck
+	defer os.Unsetenv("WORKER_API_KEY")       //nolint:errcheck
 
 	fileCfg := Config{}
 	envCfg := FromEnv()

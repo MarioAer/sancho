@@ -40,14 +40,14 @@ func TestWriteCommandWritesFile(t *testing.T) {
 	_ = (os.Chdir)(dir)
 	defer func() { _ = (os.Chdir)("/") }()
 
-	os.Setenv("SANCHO_API_KEY", "test-key")
-	os.Setenv("SANCHO_BASE_URL", backend.URL)
-	os.Setenv("SANCHO_MODEL", "fake/model")
-	os.Setenv("SANCHO_PROVIDER", "openrouter")
-	defer os.Unsetenv("SANCHO_API_KEY")
-	defer os.Unsetenv("SANCHO_BASE_URL")
-	defer os.Unsetenv("SANCHO_MODEL")
-	defer os.Unsetenv("SANCHO_PROVIDER")
+	os.Setenv("SANCHO_API_KEY", "test-key")    //nolint:errcheck
+	os.Setenv("SANCHO_BASE_URL", backend.URL)  //nolint:errcheck
+	os.Setenv("SANCHO_MODEL", "fake/model")    //nolint:errcheck
+	os.Setenv("SANCHO_PROVIDER", "openrouter") //nolint:errcheck
+	defer os.Unsetenv("SANCHO_API_KEY")        //nolint:errcheck
+	defer os.Unsetenv("SANCHO_BASE_URL")       //nolint:errcheck
+	defer os.Unsetenv("SANCHO_MODEL")          //nolint:errcheck
+	defer os.Unsetenv("SANCHO_PROVIDER")       //nolint:errcheck
 
 	writeCmd := NewWriteCmd(nil, nil)
 	writeCmd.SetArgs([]string{"--spec", "write a hello function", "--target", target})
@@ -84,14 +84,14 @@ func TestWriteCommandStdoutContainsTargetAndChars(t *testing.T) {
 	_ = (os.Chdir)(dir)
 	defer func() { _ = (os.Chdir)("/") }()
 
-	os.Setenv("SANCHO_API_KEY", "test-key")
-	os.Setenv("SANCHO_BASE_URL", backend.URL)
-	os.Setenv("SANCHO_MODEL", "fake/model")
-	os.Setenv("SANCHO_PROVIDER", "openrouter")
-	defer os.Unsetenv("SANCHO_API_KEY")
-	defer os.Unsetenv("SANCHO_BASE_URL")
-	defer os.Unsetenv("SANCHO_MODEL")
-	defer os.Unsetenv("SANCHO_PROVIDER")
+	os.Setenv("SANCHO_API_KEY", "test-key")    //nolint:errcheck
+	os.Setenv("SANCHO_BASE_URL", backend.URL)  //nolint:errcheck
+	os.Setenv("SANCHO_MODEL", "fake/model")    //nolint:errcheck
+	os.Setenv("SANCHO_PROVIDER", "openrouter") //nolint:errcheck
+	defer os.Unsetenv("SANCHO_API_KEY")        //nolint:errcheck
+	defer os.Unsetenv("SANCHO_BASE_URL")       //nolint:errcheck
+	defer os.Unsetenv("SANCHO_MODEL")          //nolint:errcheck
+	defer os.Unsetenv("SANCHO_PROVIDER")       //nolint:errcheck
 
 	writeCmd := NewWriteCmd(nil, nil)
 	writeCmd.SetArgs([]string{"--spec", "write something", "--target", target})
@@ -128,14 +128,14 @@ func TestWriteCommandContextInjection(t *testing.T) {
 	_ = (os.Chdir)(dir)
 	defer func() { _ = (os.Chdir)("/") }()
 
-	os.Setenv("SANCHO_API_KEY", "test-key")
-	os.Setenv("SANCHO_BASE_URL", backend.URL)
-	os.Setenv("SANCHO_MODEL", "fake/model")
-	os.Setenv("SANCHO_PROVIDER", "openrouter")
-	defer os.Unsetenv("SANCHO_API_KEY")
-	defer os.Unsetenv("SANCHO_BASE_URL")
-	defer os.Unsetenv("SANCHO_MODEL")
-	defer os.Unsetenv("SANCHO_PROVIDER")
+	os.Setenv("SANCHO_API_KEY", "test-key")    //nolint:errcheck
+	os.Setenv("SANCHO_BASE_URL", backend.URL)  //nolint:errcheck
+	os.Setenv("SANCHO_MODEL", "fake/model")    //nolint:errcheck
+	os.Setenv("SANCHO_PROVIDER", "openrouter") //nolint:errcheck
+	defer os.Unsetenv("SANCHO_API_KEY")        //nolint:errcheck
+	defer os.Unsetenv("SANCHO_BASE_URL")       //nolint:errcheck
+	defer os.Unsetenv("SANCHO_MODEL")          //nolint:errcheck
+	defer os.Unsetenv("SANCHO_PROVIDER")       //nolint:errcheck
 
 	writeCmd := NewWriteCmd(nil, nil)
 	writeCmd.SetArgs([]string{"--spec", "match style", "--target", target, "--context", "./style.go"})

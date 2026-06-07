@@ -55,7 +55,7 @@ func NewWriteCmd(stdout, stderr *os.File) *cobra.Command {
 				MaxTokens: settings.WriteMaxTokens,
 			})
 			if err != nil {
-				fmt.Fprintln(stderr, "Error:", err)
+				fmt.Fprintln(stderr, "Error:", err) //nolint:errcheck
 				return err
 			}
 
@@ -67,8 +67,8 @@ func NewWriteCmd(stdout, stderr *os.File) *cobra.Command {
 				return err
 			}
 
-			fmt.Fprintf(stdout, "Wrote %s (%d chars)\n", target, len(content))
-			fmt.Fprintf(stderr, "Tokens: %d prompt + %d completion = %d total\n",
+			fmt.Fprintf(stdout, "Wrote %s (%d chars)\n", target, len(content))    //nolint:errcheck
+			fmt.Fprintf(stderr, "Tokens: %d prompt + %d completion = %d total\n", //nolint:errcheck
 				resp.Usage.PromptTokens, resp.Usage.CompletionTokens, resp.Usage.TotalTokens)
 			return nil
 		},

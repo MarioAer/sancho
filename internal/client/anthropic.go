@@ -33,7 +33,7 @@ func (a *Anthropic) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatR
 	if err != nil {
 		return nil, fmt.Errorf("anthropic request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == http.StatusTooManyRequests {
 		return nil, &apperr.RetryableError{Msg: fmt.Sprintf("anthropic rate limited (%d)", resp.StatusCode)}

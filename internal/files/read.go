@@ -65,7 +65,7 @@ func FormatForPrompt(results []FileResult) string {
 		if r.Error != nil {
 			continue
 		}
-		sb.WriteString(fmt.Sprintf("<file path=\"%s\">%s</file>", r.Path, r.Content))
+		fmt.Fprintf(&sb, "<file path=\"%s\">%s</file>", r.Path, r.Content)
 	}
 	return sb.String()
 }

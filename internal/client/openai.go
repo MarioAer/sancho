@@ -28,7 +28,7 @@ func (o *OpenAI) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatResp
 	if err != nil {
 		return nil, fmt.Errorf("openai request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == http.StatusTooManyRequests {
 		retryAfter := parseRetryAfter(resp.Header.Get("Retry-After"))

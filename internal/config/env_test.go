@@ -6,10 +6,10 @@ import (
 )
 
 func TestEnvConfigReadsSANCHO(t *testing.T) {
-	os.Setenv("SANCHO_API_KEY", "sk-or-test")
-	os.Setenv("SANCHO_MODEL", "custom/model")
-	defer os.Unsetenv("SANCHO_API_KEY")
-	defer os.Unsetenv("SANCHO_MODEL")
+	os.Setenv("SANCHO_API_KEY", "sk-or-test") //nolint:errcheck
+	os.Setenv("SANCHO_MODEL", "custom/model") //nolint:errcheck
+	defer os.Unsetenv("SANCHO_API_KEY")       //nolint:errcheck
+	defer os.Unsetenv("SANCHO_MODEL")         //nolint:errcheck
 
 	cfg := FromEnv()
 	if cfg.APIKey != "sk-or-test" {
@@ -21,9 +21,9 @@ func TestEnvConfigReadsSANCHO(t *testing.T) {
 }
 
 func TestEnvConfigWorkerFallback(t *testing.T) {
-	os.Setenv("WORKER_API_KEY", "sk-legacy")
-	os.Unsetenv("SANCHO_API_KEY")
-	defer os.Unsetenv("WORKER_API_KEY")
+	os.Setenv("WORKER_API_KEY", "sk-legacy") //nolint:errcheck
+	os.Unsetenv("SANCHO_API_KEY")            //nolint:errcheck
+	defer os.Unsetenv("WORKER_API_KEY")      //nolint:errcheck
 
 	cfg := FromEnv()
 	if cfg.APIKey != "sk-legacy" {

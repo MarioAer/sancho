@@ -8,8 +8,8 @@ import (
 func TestResolvePrecedence(t *testing.T) {
 	dir := t.TempDir()
 	_ = os.WriteFile(dir+"/.sancho.json", []byte(`{"api_key":"file-key","model":"file/model"}`), 0644)
-	os.Setenv("SANCHO_API_KEY", "env-key")
-	defer os.Unsetenv("SANCHO_API_KEY")
+	os.Setenv("SANCHO_API_KEY", "env-key") //nolint:errcheck
+	defer os.Unsetenv("SANCHO_API_KEY")    //nolint:errcheck
 
 	fileCfg, _ := LoadFile(dir)
 	envCfg := FromEnv()
