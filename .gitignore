@@ -1,0 +1,24 @@
+# Binaries
+sancho
+sancho.exe
+
+# Go
+*.out
+*.test
+*.prof
+vendor/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local environment
+.env
+.env.local
+mise.local.toml
