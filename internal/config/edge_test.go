@@ -9,12 +9,13 @@ import (
 func TestFilePrecedence(t *testing.T) {
 	dir := t.TempDir()
 	project := filepath.Join(dir, "project")
-	os.MkdirAll(project, 0755)
-	os.WriteFile(project+"/.sancho.json", []byte(`{"provider":"openrouter"}`), 0644)
+	_ = os.MkdirAll(project, 0755)
+	_ = os.WriteFile(project+"/.sancho.json", []byte(`{"provider":"openrouter"}`), 0644)
 
 	homeDir := filepath.Join(dir, "home", ".config", "sancho")
-	os.MkdirAll(homeDir, 0755)
-	os.WriteFile(homeDir+"/config.json", []byte(`{"provider":"anthropic"}`), 0644)
+	_ = os.MkdirAll(homeDir, 0755)
+	_ = os.WriteFile(homeDir+"/config.json", []byte(`{"provider":"anthropic"}`), 0644)
+	_ = os.WriteFile(homeDir+"/config.json", []byte(`{"provider":"anthropic"}`), 0644)
 
 	origHome := os.Getenv("HOME")
 	os.Setenv("HOME", filepath.Join(dir, "home"))
@@ -35,7 +36,7 @@ func TestFilePrecedence(t *testing.T) {
 
 func TestFileJSONCStrip(t *testing.T) {
 	dir := t.TempDir()
-	os.WriteFile(dir+"/.sancho.json", []byte(`{
+	_ = os.WriteFile(dir+"/.sancho.json", []byte(`{
         /* block comment */
         "model": "test-model",
         // line comment

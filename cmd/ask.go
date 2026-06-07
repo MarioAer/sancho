@@ -69,6 +69,6 @@ func NewAskCmd(stdout, stderr *os.File) *cobra.Command {
 
 	cmd.Flags().StringSliceVarP(&paths, "paths", "p", nil, "files to ingest")
 	cmd.Flags().StringVarP(&question, "question", "q", "", "extraction query")
-	cmd.Flags().BoolVar(&jsonOutput, "json", false, "emit JSON only (suppress cost footer)")
+	cmd.Flags().BoolVar(&jsonOutput, "json", false, "emit JSON response instead of TOON")
 	return cmd
 }

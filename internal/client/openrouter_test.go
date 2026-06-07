@@ -21,9 +21,9 @@ func TestOpenRouterChatCompletion(t *testing.T) {
 		if r.Header.Get("Authorization") != "Bearer sk-or-test" {
 			t.Errorf("expected Bearer sk-or-test, got %s", r.Header.Get("Authorization"))
 		}
-		json.NewDecoder(r.Body).Decode(&received)
+		_ = json.NewDecoder(r.Body).Decode(&received)
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"id":      "test",
 			"object":  "chat.completion",
 			"created": 1,

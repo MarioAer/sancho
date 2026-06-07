@@ -16,7 +16,7 @@ func TestAskCommand(t *testing.T) {
 		var req struct {
 			Messages []client.Message `json:"messages"`
 		}
-		json.NewDecoder(r.Body).Decode(&req)
+		_ = json.NewDecoder(r.Body).Decode(&req)
 
 		systemFound := false
 		for _, m := range req.Messages {
@@ -28,14 +28,14 @@ func TestAskCommand(t *testing.T) {
 			t.Error("expected MinLang system prompt")
 		}
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"content":"analysis answer","usage":{"prompt_tokens":10,"completion_tokens":5},"finish_reason":"stop"}`))
+		_, _ = w.Write([]byte(`{"content":"analysis answer","usage":{"prompt_tokens":10,"completion_tokens":5},"finish_reason":"stop"}`))
 	}))
 	defer backend.Close()
 
 	dir := t.TempDir()
-	os.WriteFile(dir+"/foo.go", []byte("package main"), 0644)
-	os.Chdir(dir)
-	defer os.Chdir("/")
+	_ = os.WriteFile(dir+"/foo.go", []byte("package main"), 0644)
+	_ = os.Chdir(dir)
+	defer func() { _ = os.Chdir("/") }()
 
 	askCmd := NewAskCmd(os.Stdout, os.Stderr)
 	askCmd.SetArgs([]string{"-q", "what does this do", "-p", "./foo.go", "--json"})

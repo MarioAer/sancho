@@ -16,9 +16,9 @@ func TestOpenAIChatCompletion(t *testing.T) {
 		if r.URL.Path != "/chat/completions" {
 			t.Errorf("expected /chat/completions, got %s", r.URL.Path)
 		}
-		json.NewDecoder(r.Body).Decode(&struct{}{})
+		_ = json.NewDecoder(r.Body).Decode(&struct{}{})
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(ChatResponse{
+		_ = json.NewEncoder(w).Encode(ChatResponse{
 			Content:      "openai-answer",
 			Usage:        Usage{TotalTokens: 20},
 			FinishReason: "stop",

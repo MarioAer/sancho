@@ -37,8 +37,8 @@ func TestWriteCommandWritesFile(t *testing.T) {
 
 	dir := t.TempDir()
 	target := dir + "/out.go"
-	(os.Chdir)(dir)
-	defer (os.Chdir)("/")
+	_ = (os.Chdir)(dir)
+	defer func() { _ = (os.Chdir)("/") }()
 
 	os.Setenv("SANCHO_API_KEY", "test-key")
 	os.Setenv("SANCHO_BASE_URL", backend.URL)
@@ -81,8 +81,8 @@ func TestWriteCommandStdoutContainsTargetAndChars(t *testing.T) {
 
 	dir := t.TempDir()
 	target := dir + "/out.go"
-	(os.Chdir)(dir)
-	defer (os.Chdir)("/")
+	_ = (os.Chdir)(dir)
+	defer func() { _ = (os.Chdir)("/") }()
 
 	os.Setenv("SANCHO_API_KEY", "test-key")
 	os.Setenv("SANCHO_BASE_URL", backend.URL)
@@ -124,9 +124,9 @@ func TestWriteCommandContextInjection(t *testing.T) {
 
 	dir := t.TempDir()
 	target := dir + "/out.go"
-	(os.WriteFile)(dir+"/style.go", []byte("// Go style reference"), 0644)
-	(os.Chdir)(dir)
-	defer (os.Chdir)("/")
+	_ = (os.WriteFile)(dir+"/style.go", []byte("// Go style reference"), 0644)
+	_ = (os.Chdir)(dir)
+	defer func() { _ = (os.Chdir)("/") }()
 
 	os.Setenv("SANCHO_API_KEY", "test-key")
 	os.Setenv("SANCHO_BASE_URL", backend.URL)

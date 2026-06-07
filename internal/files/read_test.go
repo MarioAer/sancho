@@ -8,8 +8,8 @@ import (
 
 func TestReadFilesGlob(t *testing.T) {
 	dir := t.TempDir()
-	os.WriteFile(dir+"/a.txt", []byte("AAA"), 0644)
-	os.WriteFile(dir+"/b.txt", []byte("BBB"), 0644)
+	_ = os.WriteFile(dir+"/a.txt", []byte("AAA"), 0644)
+	_ = os.WriteFile(dir+"/b.txt", []byte("BBB"), 0644)
 
 	results, err := ReadFiles(dir + "/*.txt")
 	if err != nil {
@@ -30,8 +30,8 @@ func TestReadFilesMissing(t *testing.T) {
 func TestReadFilesRecursiveGlob(t *testing.T) {
 	dir := t.TempDir()
 	sub := filepath.Join(dir, "sub")
-	os.MkdirAll(sub, 0755)
-	os.WriteFile(sub+"/c.txt", []byte("CCC"), 0644)
+	_ = os.MkdirAll(sub, 0755)
+	_ = os.WriteFile(sub+"/c.txt", []byte("CCC"), 0644)
 
 	results, err := ReadFiles(filepath.Join(dir, "**/*.txt"))
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 func TestLoadFileJSONC(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, ".sancho.json")
-	os.WriteFile(path, []byte(`{
+	_ = os.WriteFile(path, []byte(`{
 		// comment
 		"api_key": "sk-file",
 		"model": "file/model"

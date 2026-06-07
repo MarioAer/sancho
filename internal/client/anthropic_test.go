@@ -18,7 +18,7 @@ func TestAnthropicChatCompletion(t *testing.T) {
 			t.Error("expected anthropic-version header")
 		}
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"content":[{"text":"anthropic-answer","type":"text"}],"usage":{"input_tokens":5,"output_tokens":10}}`))
+		_, _ = w.Write([]byte(`{"content":[{"text":"anthropic-answer","type":"text"}],"usage":{"input_tokens":5,"output_tokens":10}}`))
 	}))
 	defer backend.Close()
 
@@ -42,7 +42,7 @@ func TestAnthropicRateLimit(t *testing.T) {
 	backend := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Retry-After", "3")
 		w.WriteHeader(http.StatusTooManyRequests)
-		w.Write([]byte(`{"error":{"message":"rate limit"}}`))
+		_, _ = w.Write([]byte(`{"error":{"message":"rate limit"}}`))
 	}))
 	defer backend.Close()
 
