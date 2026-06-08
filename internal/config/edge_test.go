@@ -56,7 +56,7 @@ func TestResolveCLIOverridesFile(t *testing.T) {
 	fileCfg := Config{APIKey: "file-key", Model: "file/model"}
 	envCfg := FromEnv()
 	flags := CLIFlags{APIKey: "cli-key", Model: "cli/model", Provider: "anthropic"}
-	s := Resolve(fileCfg, envCfg, flags, 0)
+	s := Resolve(fileCfg, envCfg, flags)
 
 	if s.APIKey != "cli-key" {
 		t.Fatalf("expected cli API key")
@@ -77,7 +77,7 @@ func TestResolveBackwardsCompat(t *testing.T) {
 	fileCfg := Config{}
 	envCfg := FromEnv()
 	flags := CLIFlags{}
-	s := Resolve(fileCfg, envCfg, flags, 0)
+	s := Resolve(fileCfg, envCfg, flags)
 
 	if s.APIKey != "legacy-key" {
 		t.Fatalf("expected WORKER_API_KEY fallback, got %s", s.APIKey)

@@ -24,7 +24,7 @@ type Settings struct {
 	Retry          RetryConfig
 }
 
-func Resolve(fileCfg Config, envCfg Config, flags CLIFlags, cmdMaxTokens int) Settings {
+func Resolve(fileCfg Config, envCfg Config, flags CLIFlags) Settings {
 	s := Settings{
 		BaseURL:        "https://openrouter.ai/api/v1",
 		Model:          "deepseek/deepseek-chat",
@@ -35,6 +35,8 @@ func Resolve(fileCfg Config, envCfg Config, flags CLIFlags, cmdMaxTokens int) Se
 		Retry:          RetryConfig{MaxAttempts: 3, BackoffMaxSeconds: 5, RetryStatusCodes: []int{429, 502, 503, 504}},
 	}
 
+	// 1. Resolve basic settings (APIKey, BaseURL, Model, Provider)
+	// Order: CLI Flag > Config File > Env Var > Default
 	if flags.APIKey != "" {
 		s.APIKey = flags.APIKey
 	} else if fileCfg.APIKey != "" {
@@ -67,22 +69,33 @@ func Resolve(fileCfg Config, envCfg Config, flags CLIFlags, cmdMaxTokens int) Se
 		s.Provider = envCfg.Provider
 	}
 
-	if cmdMaxTokens > 0 {
-		s.MaxTokens = cmdMaxTokens
-	} else if fileCfg.Ask.MaxTokens > 0 {
+	// 2. Resolve Max Tokens
+	// Command-specific limits from file take precedence over defaults.
+	if fileCfg.Ask.MaxTokens > 0 {
 		s.AskMaxTokens = fileCfg.Ask.MaxTokens
-	} else if fileCfg.Write.MaxTokens > 0 {
+	}
+	if fileCfg.Write.MaxTokens > 0 {
 		s.WriteMaxTokens = fileCfg.Write.MaxTokens
 	}
 
+	// CLI flag overrides both if set.
+	if flags.MaxTokens > 0 {
+		s.AskMaxTokens = flags.MaxTokens
+		s.WriteMaxTokens = flags.MaxTokens
+	}
+
+	// 3. Resolve other settings
 	s.OpenRouter = fileCfg.OpenRouter
 	s.Bedrock = fileCfg.Bedrock
 	s.OpenAI = fileCfg.OpenAI
 	s.Anthropic = fileCfg.Anthropic
+
 	s.Retry = fileCfg.Retry
 	if s.Retry.MaxAttempts == 0 {
 		s.Retry = envCfg.Retry
 	}
+
+	s.TimeoutSeconds = fileCfg.TimeoutSeconds
 	if s.TimeoutSeconds == 0 {
 		s.TimeoutSeconds = envCfg.TimeoutSeconds
 	}

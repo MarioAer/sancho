@@ -44,7 +44,7 @@ func ResolveSettings(cmdMaxTokens int) config.Settings {
 		Model:     model,
 		Provider:  provider,
 		MaxTokens: maxTokens,
-	}, cmdMaxTokens)
+	})
 }
 
 func Execute() {

@@ -18,12 +18,10 @@ type failingProvider struct {
 func (f *failingProvider) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatResponse, error) {
 	f.attempts++
 	if f.attempts < f.max {
-		return nil, &apperr.RetryableError{Msg: "rate limited", RetryAfter: time.Second}
+		return nil, &apperr.RetryableError{Msg: "rate limited", RetryAfter: 100 * time.Millisecond}
 	}
 	return &ChatResponse{Content: "ok"}, nil
 }
-
-func (f *failingProvider) SupportsModel(m string) bool { return true }
 
 func TestRetryMiddleware(t *testing.T) {
 	p := &failingProvider{max: 3}
@@ -35,6 +33,29 @@ func TestRetryMiddleware(t *testing.T) {
 	}
 	if p.attempts != 3 {
 		t.Fatalf("expected 3 attempts, got %d", p.attempts)
+	}
+}
+
+func TestRetryRespectsRetryAfter(t *testing.T) {
+	p := &staticProvider{err: &apperr.RetryableError{Msg: "slow down", RetryAfter: 200 * time.Millisecond}}
+	wrapped := WithRetry(p, config.RetryConfig{MaxAttempts: 2, BackoffMaxSeconds: 5})
+
+	_, err := wrapped.ChatCompletion(context.Background(), ChatRequest{})
+	if err == nil {
+		t.Fatal("expected error after max attempts")
+	}
+}
+
+func TestRetryRespectsLargeRetryAfter(t *testing.T) {
+	p := &staticProvider{err: &apperr.RetryableError{Msg: "slow down", RetryAfter: 500 * time.Millisecond}}
+	wrapped := WithRetry(p, config.RetryConfig{MaxAttempts: 2, BackoffMaxSeconds: 1})
+
+	start := time.Now()
+	_, _ = wrapped.ChatCompletion(context.Background(), ChatRequest{})
+	duration := time.Since(start)
+
+	if duration < 500*time.Millisecond {
+		t.Errorf("expected wait of at least 500ms, got %v", duration)
 	}
 }
 
@@ -60,5 +81,3 @@ func (s *staticProvider) ChatCompletion(ctx context.Context, req ChatRequest) (*
 	s.calls++
 	return nil, s.err
 }
-
-func (s *staticProvider) SupportsModel(m string) bool { return true }

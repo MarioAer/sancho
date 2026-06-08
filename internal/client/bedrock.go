@@ -13,10 +13,6 @@ func (b *Bedrock) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatRes
 	return nil, nil
 }
 
-func (b *Bedrock) SupportsModel(model string) bool {
-	return true
-}
-
 func (b *Bedrock) mapModel(model string) string {
 	if b.Mappings == nil {
 		return model

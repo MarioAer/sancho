@@ -15,6 +15,13 @@ type OpenAI struct {
 	BaseURL string
 }
 
+type openAIResponse struct {
+	Choices []struct {
+		Message Message `json:"message"`
+	} `json:"choices"`
+	Usage Usage `json:"usage"`
+}
+
 func (o *OpenAI) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatResponse, error) {
 	body, _ := json.Marshal(req)
 	httpReq, err := http.NewRequestWithContext(ctx, "POST", o.BaseURL+"/chat/completions", bytes.NewReader(body))
@@ -38,13 +45,17 @@ func (o *OpenAI) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatResp
 		return nil, &apperr.RetryableError{Msg: fmt.Sprintf("openai server error (%d)", resp.StatusCode)}
 	}
 
-	var cr ChatResponse
-	if err := json.NewDecoder(resp.Body).Decode(&cr); err != nil {
+	var oaResp openAIResponse
+	if err := json.NewDecoder(resp.Body).Decode(&oaResp); err != nil {
 		return nil, fmt.Errorf("openai response decode failed: %w", err)
 	}
-	return &cr, nil
-}
 
-func (o *OpenAI) SupportsModel(model string) bool {
-	return true
+	if len(oaResp.Choices) > 0 {
+		return &ChatResponse{
+			Content: oaResp.Choices[0].Message.Content,
+			Usage:   oaResp.Usage,
+		}, nil
+	}
+
+	return &ChatResponse{}, nil
 }

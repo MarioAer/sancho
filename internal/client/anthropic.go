@@ -69,7 +69,3 @@ func (a *Anthropic) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatR
 		FinishReason: "stop",
 	}, nil
 }
-
-func (a *Anthropic) SupportsModel(model string) bool {
-	return true
-}

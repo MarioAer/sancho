@@ -19,7 +19,3 @@ func (t *timeoutProvider) ChatCompletion(ctx context.Context, req ChatRequest) (
 	defer cancel()
 	return t.next.ChatCompletion(ctx, req)
 }
-
-func (t *timeoutProvider) SupportsModel(model string) bool {
-	return t.next.SupportsModel(model)
-}

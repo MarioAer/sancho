@@ -52,7 +52,6 @@ func NewAskCmd(stdout, stderr *os.File) *cobra.Command {
 			}
 			resp, err := p.ChatCompletion(cmd.Context(), req)
 			if err != nil {
-				fmt.Fprintln(stderr, "Error:", err) //nolint:errcheck
 				return err
 			}
 

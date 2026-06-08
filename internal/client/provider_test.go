@@ -38,11 +38,3 @@ func TestNewProviderDefaultFallback(t *testing.T) {
 		t.Fatalf("expected wrapped provider, got %T", p)
 	}
 }
-
-func TestWrappedProviderSupportsModel(t *testing.T) {
-	s := config.Settings{Provider: "openrouter", APIKey: "sk-or", BaseURL: "https://openrouter.ai/api/v1", TimeoutSeconds: 120, Retry: config.RetryConfig{MaxAttempts: 3}}
-	p := NewProvider(s)
-	if !p.SupportsModel("any-model") {
-		t.Fatal("expected SupportsModel to return true")
-	}
-}

@@ -18,10 +18,11 @@ func TestOpenAIChatCompletion(t *testing.T) {
 		}
 		_ = json.NewDecoder(r.Body).Decode(&struct{}{})
 		w.WriteHeader(http.StatusOK)
-		_ = json.NewEncoder(w).Encode(ChatResponse{
-			Content:      "openai-answer",
-			Usage:        Usage{TotalTokens: 20},
-			FinishReason: "stop",
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"choices": []map[string]any{{
+				"message": map[string]string{"content": "openai-answer"},
+			}},
+			"usage": map[string]int{"total_tokens": 20},
 		})
 	}))
 	defer backend.Close()

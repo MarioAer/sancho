@@ -28,6 +28,13 @@ type OpenRouter struct {
 	BaseURL string
 }
 
+type openRouterResponse struct {
+	Choices []struct {
+		Message Message `json:"message"`
+	} `json:"choices"`
+	Usage Usage `json:"usage"`
+}
+
 func (o *OpenRouter) ChatCompletion(ctx context.Context, req ChatRequest) (*ChatResponse, error) {
 	body, _ := json.Marshal(req)
 	httpReq, err := http.NewRequestWithContext(ctx, "POST", o.BaseURL+"/chat/completions", bytes.NewReader(body))
@@ -53,40 +60,17 @@ func (o *OpenRouter) ChatCompletion(ctx context.Context, req ChatRequest) (*Chat
 		return nil, &apperr.RetryableError{Msg: fmt.Sprintf("openrouter server error (%d)", resp.StatusCode)}
 	}
 
-	var raw map[string]any
-	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
+	var orResp openRouterResponse
+	if err := json.NewDecoder(resp.Body).Decode(&orResp); err != nil {
 		return nil, fmt.Errorf("openrouter response decode failed: %w", err)
 	}
 
-	choices, _ := raw["choices"].([]any)
-	if len(choices) > 0 {
-		choice, _ := choices[0].(map[string]any)
-		message, _ := choice["message"].(map[string]any)
-		content, _ := message["content"].(string)
-		if content != "" {
-			return &ChatResponse{
-				Content: content,
-				Usage: Usage{
-					PromptTokens:     0,
-					CompletionTokens: 0,
-					TotalTokens:      0,
-				},
-				FinishReason: "stop",
-			}, nil
-		}
+	if len(orResp.Choices) > 0 {
+		return &ChatResponse{
+			Content: orResp.Choices[0].Message.Content,
+			Usage:   orResp.Usage,
+		}, nil
 	}
 
-	return &ChatResponse{
-		Content: "",
-		Usage: Usage{
-			PromptTokens:     0,
-			CompletionTokens: 0,
-			TotalTokens:      0,
-		},
-		FinishReason: "stop",
-	}, nil
-}
-
-func (o *OpenRouter) SupportsModel(model string) bool {
-	return true
+	return &ChatResponse{}, nil
 }

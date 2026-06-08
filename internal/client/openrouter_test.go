@@ -54,6 +54,9 @@ func TestOpenRouterChatCompletion(t *testing.T) {
 	if resp.Content != "answer" {
 		t.Fatalf("expected answer, got %s", resp.Content)
 	}
+	if resp.Usage.TotalTokens != 15 {
+		t.Fatalf("expected 15 total tokens, got %d", resp.Usage.TotalTokens)
+	}
 	if received.Model != "test-model" {
 		t.Fatalf("expected model test-model in request")
 	}

@@ -37,11 +37,11 @@ type AnthropicConfig struct {
 }
 
 type AskConfig struct {
-	MaxTokens int
+	MaxTokens int `json:"max_tokens"`
 }
 
 type WriteConfig struct {
-	MaxTokens int
+	MaxTokens int `json:"max_tokens"`
 }
 
 type RetryConfig struct {

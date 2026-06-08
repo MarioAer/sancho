@@ -29,15 +29,16 @@ func TestReadFilesMissing(t *testing.T) {
 
 func TestReadFilesRecursiveGlob(t *testing.T) {
 	dir := t.TempDir()
-	sub := filepath.Join(dir, "sub")
+	sub := filepath.Join(dir, "sub", "deep")
 	_ = os.MkdirAll(sub, 0755)
 	_ = os.WriteFile(sub+"/c.txt", []byte("CCC"), 0644)
+	_ = os.WriteFile(dir+"/d.txt", []byte("DDD"), 0644)
 
 	results, err := ReadFiles(filepath.Join(dir, "**/*.txt"))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if len(results) != 1 {
-		t.Fatalf("expected 1 file via ** glob, got %d", len(results))
+	if len(results) != 2 {
+		t.Fatalf("expected 2 files via ** glob, got %d", len(results))
 	}
 }

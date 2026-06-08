@@ -55,7 +55,6 @@ func NewWriteCmd(stdout, stderr *os.File) *cobra.Command {
 				MaxTokens: settings.WriteMaxTokens,
 			})
 			if err != nil {
-				fmt.Fprintln(stderr, "Error:", err) //nolint:errcheck
 				return err
 			}
 

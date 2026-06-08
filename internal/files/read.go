@@ -3,8 +3,9 @@ package files
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
+
+	"github.com/bmatcuk/doublestar/v4"
 )
 
 type FileResult struct {
@@ -14,39 +15,22 @@ type FileResult struct {
 }
 
 func ReadFiles(pattern string) ([]FileResult, error) {
-	matches, err := filepath.Glob(pattern)
+	matches, err := doublestar.FilepathGlob(pattern)
 	if err != nil {
 		return nil, err
-	}
-
-	if strings.Contains(pattern, "**") {
-		dir := filepath.Dir(pattern)
-		err := filepath.Walk(dir, func(path string, _ os.FileInfo, walkErr error) error {
-			if walkErr != nil {
-				return nil
-			}
-			ext := filepath.Ext(path)
-			if ext == filepath.Ext(pattern) {
-				matches = append(matches, path)
-			}
-			return nil
-		})
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	if len(matches) == 0 {
 		return nil, fmt.Errorf("no files match pattern: %s", pattern)
 	}
 
-	seen := make(map[string]bool)
 	var results []FileResult
 	for _, m := range matches {
-		if seen[m] {
+		info, err := os.Stat(m)
+		if err != nil || info.IsDir() {
 			continue
 		}
-		seen[m] = true
+
 		data, readErr := os.ReadFile(m)
 		r := FileResult{Path: m}
 		if readErr != nil {

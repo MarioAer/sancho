@@ -39,7 +39,7 @@ func (r *retryProvider) ChatCompletion(ctx context.Context, req ChatRequest) (*C
 		if delay > r.backoffMax {
 			delay = r.backoffMax
 		}
-		if retryErr.RetryAfter > 0 && retryErr.RetryAfter < delay {
+		if retryErr.RetryAfter > delay {
 			delay = retryErr.RetryAfter
 		}
 		select {
@@ -49,8 +49,4 @@ func (r *retryProvider) ChatCompletion(ctx context.Context, req ChatRequest) (*C
 		}
 	}
 	return nil, lastErr
-}
-
-func (r *retryProvider) SupportsModel(model string) bool {
-	return r.next.SupportsModel(model)
 }

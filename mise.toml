@@ -1,7 +1,6 @@
 [tools]
 go = "1.26"
 golangci-lint = "2.12.2"
-staticcheck = "latest"
 
 [tasks.check]
 description = "Run all verification checks (fmt, vet, lint, staticcheck)"
@@ -29,7 +28,7 @@ run = "golangci-lint run --fix"
 
 [tasks."check:static"]
 description = "Run staticcheck"
-run = "staticcheck ./..."
+run = "go run honnef.co/go/tools/cmd/staticcheck@latest ./..."
 
 [tasks.test]
 description = "Run Go tests"

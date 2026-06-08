@@ -32,7 +32,6 @@ type Usage struct {
 
 type Provider interface {
 	ChatCompletion(ctx context.Context, req ChatRequest) (*ChatResponse, error)
-	SupportsModel(model string) bool
 }
 
 var newProviderFunc = func(s config.Settings) Provider {
