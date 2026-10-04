@@ -24,4 +24,6 @@ jobs:
           version: latest
           args: release --clean
         env:
-          GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
+          # Built-in token for the sancho release; the PAT is only used for the tap PR
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}

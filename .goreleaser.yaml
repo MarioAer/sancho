@@ -1,3 +1,5 @@
+version: 2
+
 before:
   hooks:
     - go mod tidy
@@ -16,7 +18,7 @@ builds:
     binary: sancho
 
 archives:
-  - format: tar.gz
+  - formats: [tar.gz]
     name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
@@ -25,11 +27,21 @@ checksum:
 changelog:
   use: github-native
 
-homebrews:
+brews:
   - name: sancho
-    tap:
-      owner: marioaer
+    # main on homebrew-tap is protected (PR-only), so the formula update
+    # is pushed to a branch and opened as a pull request instead.
+    repository:
+      owner: MarioAer
       name: homebrew-tap
-    folder: Formula
-    homepage: "https://github.com/marioaer/sancho"
+      branch: "sancho-{{ .Version }}"
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+      pull_request:
+        enabled: true
+        base:
+          owner: MarioAer
+          name: homebrew-tap
+          branch: main
+    directory: Formula
+    homepage: "https://github.com/MarioAer/sancho"
     description: "CLI for delegating coding tasks to LLMs"
